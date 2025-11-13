@@ -1,21 +1,25 @@
 class Solution {
     public void solve(int[] nums,int n,List<List<Integer>> res,List<Integer> arr){
         if(n==nums.length){
-            for(int i=0;i<res.size();i++){
-                if(res.get(i).equals(arr)){
-                    return;
-                }
-            }
+            // for(int i=0;i<res.size();i++){
+            //     if(res.get(i).equals(arr)){
+            //         return;
+            //     }
+            // }
             res.add(new ArrayList<>(arr));
             return;
         }
-        //exclude
-        solve(nums,n+1,res,arr);
-        
         //include
         arr.add(nums[n]);
         solve(nums,n+1,res,arr);
         arr.remove(arr.size()-1);
+        //exclude
+        int idx = n+1;
+        while(idx<nums.length && nums[idx] == nums[n]){
+            idx++;
+        }
+        solve(nums,idx,res,arr);
+        
 
     }
     public List<List<Integer>> subsetsWithDup(int[] nums) {
