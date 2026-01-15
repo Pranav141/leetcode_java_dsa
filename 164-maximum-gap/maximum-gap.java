@@ -3,10 +3,18 @@ class Solution {
         if(nums.length<2){
             return 0;
         }
-        Arrays.sort(nums);
+        PriorityQueue<Integer> pq = new PriorityQueue<Integer>();
+
+        // Arrays.sort(nums);
         int res = Integer.MIN_VALUE;
-        for(int i=1;i<nums.length;i++){
-            res = Math.max(res,nums[i]-nums[i-1]);
+        for(int i=0;i<nums.length;i++){
+            pq.add(nums[i]);
+        }
+        int prev = pq.poll();
+        while(!pq.isEmpty()){
+            int next = pq.poll();
+            res=Math.max(res,Math.abs(next-prev));
+            prev = next;
         }
         return res;
     }
