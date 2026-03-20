@@ -14,22 +14,14 @@
  * }
  */
 class Solution {
-    public void solve(TreeNode root, List<TreeNode> arr){
+    public boolean solve(TreeNode root, long min,long max){
         if(root == null){
-            return;
+            return true;
         }
-        solve(root.left,arr);
-        arr.add(root);
-        solve(root.right,arr);
+        if(root.val >= max || root.val <= min) return false;
+        return solve(root.left,min,root.val) && solve(root.right,root.val,max);
     }
     public boolean isValidBST(TreeNode root) {
-        List<TreeNode> arr = new ArrayList<>();
-        solve(root,arr);
-        for(int i=1;i<arr.size();i++){
-            if(arr.get(i).val <= arr.get(i-1).val){
-                return false;
-            }
-        }
-        return true;
+        return solve(root,Long.MIN_VALUE,Long.MAX_VALUE);
     }
 }
