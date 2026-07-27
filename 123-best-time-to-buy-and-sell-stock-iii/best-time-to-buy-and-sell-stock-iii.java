@@ -1,24 +1,38 @@
 class Solution {
-    public int maxProfit(int[] prices) {
-        // [3,3,5,0,0,3,1,4]
-        // b1 = -3 b2 = -3
-        // p = 3 b1 = -3 s1 = 0 b2 = -3 s2 = 0
-        // p = 5 b1 = -3 s1 = 2 b2 = -3 s2 = 0
-        // p = 0 b1 = 0 s1 = 2 b2 = 2 s2 = 2
-        // p = 0 b1 = 0 s1 = 2 b2 = 2 s2 = 2
-        // p = 3 b1 = 0 s1 = 3 b2 = 2 s2 = 2
-        // p = 1 b1 = 0 s1 = 3 b2 = 2 s2 = 3
-        // p = 4 b1 = 0 s1 = 4 b2 = 2 s2 = 6
-        int b1 = -prices[0];
-        int s1 = 0;
-        int b2 = -prices[0];
-        int s2 = 0;
-        for(int i:prices){
-            b1 = Math.max(b1,-i);
-            s1 = Math.max(s1,b1+i);
-            b2 = Math.max(b2,s1-i);
-            s2 = Math.max(s2,b2+i);
+    public int solve(int[][][] dp,int[] prices,int ind,int tran,int buy,int n){
+        if(ind == n){
+            return 0;
         }
-        return s2;
+        if(dp[ind][buy][tran] != -1){
+            return dp[ind][buy][tran];
+        }
+        if(tran == 2){
+            return 0;
+        }
+        int profit;
+        if(buy == 0){
+            profit = Math.max(
+                0 + solve(dp,prices,ind+1,tran,0,n),
+                -prices[ind] + solve(dp,prices,ind+1,tran,1,n)
+            );
+        }
+        else{
+            profit = Math.max(
+                0 + solve(dp,prices,ind+1,tran,1,n),
+                prices[ind] + solve(dp,prices,ind+1,tran+1,0,n)
+            );
+        }
+        dp[ind][buy][tran] = profit;
+        return profit;
+    }
+    public int maxProfit(int[] prices) {
+        int n = prices.length;
+        int[][][] dp = new int[n+1][2][3];
+        for(int[][] i:dp){
+            for(int[] j:i){
+                Arrays.fill(j,-1);
+            }
+        }
+        return solve(dp,prices,0,0,0,n);
     }
 }
