@@ -1,42 +1,33 @@
 class Solution {
-    public int solve(int[][] dp,int ind,int buy,int[] prices){
-        if(ind == prices.length){
+    public int solve(int[][] dp,int[] prices,int ind,int buy,int n){
+        if(ind == n){
             return 0;
         }
-
         if(dp[ind][buy] != -1){
             return dp[ind][buy];
         }
         int profit;
         if(buy == 0){
             profit = Math.max(
-                0+solve(dp,ind+1,0,prices),
-                -prices[ind] + solve(dp,ind+1,1,prices)
+                0 + solve(dp,prices,ind+1,0,n),
+                -prices[ind] + solve(dp,prices,ind+1,1,n)
             );
         }
         else{
             profit = Math.max(
-                0 + solve(dp,ind+1,1,prices),
-                prices[ind] + solve(dp,ind + 1,0,prices)  
+                0 + solve(dp,prices,ind+1,1,n),
+                prices[ind] + solve(dp,prices,ind+1,0,n)
             );
         }
         dp[ind][buy] = profit;
         return profit;
     }
     public int maxProfit(int[] prices) {
-        // int prev = prices[0];
-        // int profit = 0;
-        // for(int i=1;i<prices.length;i++){
-        //     if(prices[i]>prices[i-1]){
-        //         profit += prices[i]-prices[i-1];
-        //     }
-        // }
-        // return profit;
         int n = prices.length;
         int[][] dp = new int[n+1][2];
         for(int[] i:dp){
             Arrays.fill(i,-1);
         }
-        return solve(dp,0,0,prices);
+        return solve(dp,prices,0,0,n);
     }
 }
